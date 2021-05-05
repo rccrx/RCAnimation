@@ -8,27 +8,22 @@
 
 /* Begin PBXBuildFile section */
 		51CA95FE2622FE99004F183C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 51CA95FD2622FE99004F183C /* AppDelegate.m */; };
-		51CA96012622FE99004F183C /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 51CA96002622FE99004F183C /* SceneDelegate.m */; };
-		51CA96042622FE99004F183C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51CA96032622FE99004F183C /* ViewController.m */; };
-		51CA96072622FE99004F183C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51CA96052622FE99004F183C /* Main.storyboard */; };
 		51CA96092622FE9C004F183C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51CA96082622FE9C004F183C /* Assets.xcassets */; };
 		51CA960C2622FE9C004F183C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51CA960A2622FE9C004F183C /* LaunchScreen.storyboard */; };
 		51CA960F2622FE9C004F183C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 51CA960E2622FE9C004F183C /* main.m */; };
+		51D51E132642889F005EF590 /* RCUIViewAnimationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D51E122642889F005EF590 /* RCUIViewAnimationController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		51CA95F92622FE99004F183C /* RCAnimation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RCAnimation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		51CA95FC2622FE99004F183C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		51CA95FD2622FE99004F183C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		51CA95FF2622FE99004F183C /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
-		51CA96002622FE99004F183C /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
-		51CA96022622FE99004F183C /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		51CA96032622FE99004F183C /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		51CA96062622FE99004F183C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		51CA96082622FE9C004F183C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		51CA960B2622FE9C004F183C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		51CA960D2622FE9C004F183C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		51CA960E2622FE9C004F183C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		51D51E112642889F005EF590 /* RCUIViewAnimationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCUIViewAnimationController.h; sourceTree = "<group>"; };
+		51D51E122642889F005EF590 /* RCUIViewAnimationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCUIViewAnimationController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,11 +59,6 @@
 				51CA96162622FEBE004F183C /* UIViewAnimation */,
 				51CA95FC2622FE99004F183C /* AppDelegate.h */,
 				51CA95FD2622FE99004F183C /* AppDelegate.m */,
-				51CA95FF2622FE99004F183C /* SceneDelegate.h */,
-				51CA96002622FE99004F183C /* SceneDelegate.m */,
-				51CA96022622FE99004F183C /* ViewController.h */,
-				51CA96032622FE99004F183C /* ViewController.m */,
-				51CA96052622FE99004F183C /* Main.storyboard */,
 				51CA96082622FE9C004F183C /* Assets.xcassets */,
 				51CA960A2622FE9C004F183C /* LaunchScreen.storyboard */,
 				51CA960D2622FE9C004F183C /* Info.plist */,
@@ -80,6 +70,8 @@
 		51CA96162622FEBE004F183C /* UIViewAnimation */ = {
 			isa = PBXGroup;
 			children = (
+				51D51E112642889F005EF590 /* RCUIViewAnimationController.h */,
+				51D51E122642889F005EF590 /* RCUIViewAnimationController.m */,
 			);
 			path = UIViewAnimation;
 			sourceTree = "<group>";
@@ -110,6 +102,7 @@
 		51CA95F12622FE98004F183C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = RC;
 				LastUpgradeCheck = 1240;
 				TargetAttributes = {
 					51CA95F82622FE99004F183C = {
@@ -142,7 +135,6 @@
 			files = (
 				51CA960C2622FE9C004F183C /* LaunchScreen.storyboard in Resources */,
 				51CA96092622FE9C004F183C /* Assets.xcassets in Resources */,
-				51CA96072622FE99004F183C /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -153,24 +145,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				51CA96042622FE99004F183C /* ViewController.m in Sources */,
+				51D51E132642889F005EF590 /* RCUIViewAnimationController.m in Sources */,
 				51CA95FE2622FE99004F183C /* AppDelegate.m in Sources */,
 				51CA960F2622FE9C004F183C /* main.m in Sources */,
-				51CA96012622FE99004F183C /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		51CA96052622FE99004F183C /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				51CA96062622FE99004F183C /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		51CA960A2622FE9C004F183C /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -301,6 +284,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = RCAnimation/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -318,6 +302,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = RCAnimation/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
