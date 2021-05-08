@@ -7,12 +7,6 @@
 
 #import "RCCustomView.h"
 
-@interface RCCustomView ()
-/** 子视图1 */
-@property (nonatomic, strong) UIView *leftView;
-/** 子视图2 */
-@property (nonatomic, strong) UILabel *rightView;
-@end
 @implementation RCCustomView
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -30,8 +24,27 @@
         [self addSubview:self.rightView];
         
 //        [self setupConstraint]; // 如果使用约束来设置子视图的位置(而不直接设置frame)，则注释掉layoutSubviews整个方法
+        
+        
+        // 用来测试transition动画的子视图，一开始没有显示
+        _centerView = [[UIView alloc] initWithFrame:CGRectMake(20, 10, 70, 30)];
+        self.centerView.backgroundColor = [UIColor cyanColor];
+        [self addSubview:self.centerView];
+        self.centerView.hidden = YES;
     }
     return self;
+}
+
+- (void)drawRect:(CGRect)rect {
+    NSLog(@"%@ : %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+}
+
+- (void)willRemoveSubview:(UIView *)subview {
+    NSLog(@"%@ : %@, subview=%@", NSStringFromClass(self.class), NSStringFromSelector(_cmd), subview);
+}
+
+- (void)didAddSubview:(UIView *)subview {
+    NSLog(@"%@ : %@, subview=%@", NSStringFromClass(self.class), NSStringFromSelector(_cmd), subview);
 }
 
 /** 首次显示本视图，或者本视图的大小改变时都会调用（本视图只有位置改变时不会调用） */

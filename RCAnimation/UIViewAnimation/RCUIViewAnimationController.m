@@ -161,6 +161,9 @@
     self.testView.alpha = 1;
     
     self.testOptionView.frame = CGRectMake(200, 50, 150, 50);
+    self.testOptionView.rightView.frame = CGRectMake(77.5, 5, 67.5, 40);
+    self.testOptionView.leftView.hidden = NO;
+    self.testOptionView.centerView.hidden = YES;
     
     if (![self.view viewWithTag:1099]) {
         UILabel *v = [[UILabel alloc] initWithFrame:CGRectMake(200, 70, 100, 120)];
@@ -211,6 +214,16 @@
         v.tag = 1095;
         [self.view addSubview:v];
     }
+    
+    if (![self.view viewWithTag:1094]) {
+        UILabel *v = [[UILabel alloc] initWithFrame:CGRectMake(200, 50, 150, 50)];
+        v.text = NSStringFromCGRect(v.frame);
+        v.adjustsFontSizeToFitWidth = YES;
+        v.layer.borderColor = [UIColor blueColor].CGColor;
+        v.layer.borderWidth = 2;
+        v.tag = 1094;
+        [self.view addSubview:v];
+    }
 }
 
 /** 测试属性动画 */
@@ -259,7 +272,10 @@
 /** 测试UIViewAnimationOptions一些选项的具体用法 */
 - (void)executeAnimationForUIViewAnimationOptionsUsage {
 //    [self executeAnimationWithUIViewAnimationOptionLayoutSubviews];
-    [self executeAnimationWithUIViewAnimationOptionBeginFromCurrentState];
+//    [self executeAnimationWithUIViewAnimationOptionBeginFromCurrentState];
+//    [self executeAnimationWithUIViewAnimationOptionOverrideInheritedDuration];
+    [self executeAnimationWithUIViewAnimationOptionAllowAnimatedContent];
+//    [self executeAnimationWithUIViewAnimationOptionShowHideTransitionViews];
 }
 
 /** 测试UIViewAnimationOptionLayoutSubviews */
@@ -307,5 +323,65 @@
         NSLog(@"%@: finished=%d (animation2)", NSStringFromSelector(_cmd), finished);
     }];
 }
+
+/** 测试UIViewAnimationOptionOverrideInheritedDuration */
+- (void)executeAnimationWithUIViewAnimationOptionOverrideInheritedDuration {
+    UIViewAnimationOptions option;
+    option = UIViewAnimationOptionOverrideInheritedDuration;
+//    option = 0;
+    
+    [UIView animateWithDuration:6 delay:0 options:0 animations:^{
+        self.testView.frame = CGRectMake(150, 50, 100, 120);
+        NSLog(@"animation1");
+        
+        [UIView animateWithDuration:2 delay:1 options:option animations:^{ // ①嵌套动画，如果delay是0则和外层动画同时开始，如果非0则比外层延迟delay秒；②如果option是UIViewAnimationOptionOverrideInheritedDuration，则嵌套动画运行时长就是设置的2s，如果option=0，则嵌套动画运行时长和外层一样，是6s而不是2s(而且因为启动比外层延迟1s所以结束也会比外层慢1s)。
+//            self.testView.backgroundColor = [UIColor orangeColor]; // 修改背景颜色立即生效没有动画效果，但是之前测试过有动画效果，为什么有时又没有动画效果？
+            self.testView.alpha = 0.1;
+            NSLog(@"animation2");
+        } completion:^(BOOL finished) {
+            NSLog(@"%@: finished=%d (animation2)", NSStringFromSelector(_cmd), finished);
+        }];
+        
+    } completion:^(BOOL finished) {
+        NSLog(@"%@: finished=%d (animation1)", NSStringFromSelector(_cmd), finished);
+    }];
+}
+
+/** 测试UIViewAnimationOptionAllowAnimatedContent */
+- (void)executeAnimationWithUIViewAnimationOptionAllowAnimatedContent {
+    UIViewAnimationOptions option;
+//    option = UIViewAnimationOptionAllowAnimatedContent; // option有没有设置xxAllowAnimatedContent都不会调用drawRect
+//    option = 0;
+//    option = UIViewAnimationOptionTransitionFlipFromLeft;
+//    option = UIViewAnimationOptionTransitionFlipFromLeft|UIViewAnimationOptionAllowAnimatedContent;
+    option = UIViewAnimationOptionTransitionCurlUp;
+//    option = UIViewAnimationOptionTransitionCurlUp|UIViewAnimationOptionAllowAnimatedContent;
+    
+    // transition动画的第一个参数view是容器视图，改变这个容器视图的内容(比如添加一个子视图)，然后加上过渡选项比如UIViewAnimationOptionTransitionFlipFromLeft，就会翻转后显示这个容器视图的新样式新内容，如果没有设置过渡选项则容器视图内容改变没有动画而是立即生效；如果在animations中什么都不做不改变容器视图的内容而只添加xxTransitionFlipFromLeft选项，这样容器视图还是有翻转的效果，但是翻转之后内容没有变。
+    [UIView transitionWithView:self.testOptionView duration:6 options:option animations:^{
+        self.testOptionView.rightView.frame = CGRectMake(30, 15, 67.5, 40); // 不管有没有设置xxAllowAnimatedContent，这个属性变化都有动画效果
+        self.testOptionView.leftView.hidden = YES;
+        self.testOptionView.centerView.hidden = NO;
+        
+        self.testOptionView.center = CGPointMake(80, 100); // ①xxCurlUp：如果没有这句代码，则xxCurlUp翻页效果在原视图位置上有投影，并且卷起来的视图vj位置会超出原视图上边界，并且逐渐变透明消失；如果有这句代码，则卷起来的视图vj上部分不显示，而且vj的位置和没有这句代码时的位置不一样，偏上。②xxCurlUp|xxAllowAnimatedContent：如果没有这句代码，效果和①一样；如果有这句代码，vj上部分不显示，而且超出testOptionView新位置的部分不显示。(xxFlipFromLeft没有这个效果) —— 这个测试还是无法确定UIViewAnimationOptionAllowAnimatedContent代表什么效果
+    } completion:^(BOOL finished) {
+        NSLog(@"%@: finished=%d", NSStringFromSelector(_cmd), finished);
+    }];
+}
+
+/** 测试UIViewAnimationOptionShowHideTransitionViews */
+- (void)executeAnimationWithUIViewAnimationOptionShowHideTransitionViews {
+    UIViewAnimationOptions option;
+    option = UIViewAnimationOptionShowHideTransitionViews;
+//    option = 0;
+//    option = UIViewAnimationOptionShowHideTransitionViews|UIViewAnimationOptionTransitionFlipFromLeft;
+    
+    // ①这个动画方法默认会将fromView从它的父视图中移除(调用RCCustomView的willRemoveSubview)，将toView添加到fromView的父视图(调用RCCustomView的didAddSubview)，添加位置取决于toView的frame。②如果options设置了UIViewAnimationOptionShowHideTransitionViews，则不会将fromView从它的父视图中移除，而是设置这个视图的hidden为YES，而且会将toView的hidden设置为NO，但是不会修改toView的父视图，所以如果toView不在fromView的父视图中则执行完这个动画方法之后还是不在。③可以使用UIViewAnimationOptionTransitionFlipFromLeft这些transition选项，比如xxTransitionFlipFromLeft会给fromView的父视图添加翻转效果。
+    [UIView transitionFromView:self.testOptionView.leftView toView:self.testOptionView.centerView duration:5 options:option completion:^(BOOL finished) {
+            NSLog(@"%@: finished=%d, leftView.superview=%@, leftView.hidden=%d", NSStringFromSelector(_cmd), finished, self.testOptionView.leftView.superview, self.testOptionView.leftView.hidden);
+    }];
+}
+
+
 
 @end
