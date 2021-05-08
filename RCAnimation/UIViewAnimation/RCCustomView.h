@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/** 用于测试UIViewAnimationOptions的自定制view，也用来测试transition动画 */
+/** 用于测试UIViewAnimationOptions的自定制view，也用来测试transition动画、performSystemAnimation */
 @interface RCCustomView : UIView
 
 /** 子视图1 */

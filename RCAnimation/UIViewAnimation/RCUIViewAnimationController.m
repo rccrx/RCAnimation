@@ -110,6 +110,7 @@
     [self selfViewAddButtonWithOriginY:300 title:@"简单测试各个UIViewAnimationOptions，某些选项的具体用法在下一个测试" tag:2];
     [self selfViewAddButtonWithOriginY:350 title:@"测试UIViewAnimationOptions一些选项的具体用法" tag:3];
     [self selfViewAddButtonWithOriginY:400 title:@"测试UIViewAnimationOptionBeginFromCurrentState可以先启动一个animation" tag:4];
+    [self selfViewAddButtonWithOriginY:450 title:@"测试关键帧动画、performSystemAnimation、performWithoutAnimation、setAnimationsEnabled" tag:5];
     
     [self createAndAddOptionsPickerViewToSelfView];
 }
@@ -144,6 +145,11 @@
             [self executeAnimationForUIViewAnimationOptionBeginFromCurrentState];
             break;
         }
+        case 5:
+        {
+            [self executeAnimations];
+            break;
+        }
             
         default:
             break;
@@ -164,6 +170,12 @@
     self.testOptionView.rightView.frame = CGRectMake(77.5, 5, 67.5, 40);
     self.testOptionView.leftView.hidden = NO;
     self.testOptionView.centerView.hidden = YES;
+    [self.testOptionView addSubview:self.testOptionView.leftView];
+    self.testOptionView.leftView.transform = CGAffineTransformIdentity;
+    self.testOptionView.leftView.alpha = 1;
+    [self.testOptionView addSubview:self.testOptionView.rightView];
+    self.testOptionView.rightView.transform = CGAffineTransformIdentity;
+    self.testOptionView.rightView.alpha = 1;
     
     if (![self.view viewWithTag:1099]) {
         UILabel *v = [[UILabel alloc] initWithFrame:CGRectMake(200, 70, 100, 120)];
@@ -374,9 +386,9 @@
 /** 测试UIViewAnimationOptionShowHideTransitionViews */
 - (void)executeAnimationWithUIViewAnimationOptionShowHideTransitionViews {
     UIViewAnimationOptions option;
-    option = UIViewAnimationOptionShowHideTransitionViews;
+//    option = UIViewAnimationOptionShowHideTransitionViews;
 //    option = 0;
-//    option = UIViewAnimationOptionShowHideTransitionViews|UIViewAnimationOptionTransitionFlipFromLeft;
+    option = UIViewAnimationOptionShowHideTransitionViews|UIViewAnimationOptionTransitionFlipFromLeft;
     
     // ①这个动画方法默认会将fromView从它的父视图中移除(调用RCCustomView的willRemoveSubview)，将toView添加到fromView的父视图(调用RCCustomView的didAddSubview)，添加位置取决于toView的frame。②如果options设置了UIViewAnimationOptionShowHideTransitionViews，则不会将fromView从它的父视图中移除，而是设置这个视图的hidden为YES，而且会将toView的hidden设置为NO，但是不会修改toView的父视图，所以如果toView不在fromView的父视图中则执行完这个动画方法之后还是不在。③可以使用UIViewAnimationOptionTransitionFlipFromLeft这些transition选项，比如xxTransitionFlipFromLeft会给fromView的父视图添加翻转效果。
     [UIView transitionFromView:self.testOptionView.leftView toView:self.testOptionView.centerView duration:5 options:option completion:^(BOOL finished) {
@@ -417,6 +429,73 @@
         self.testView.frame = CGRectMake(250, 550, 200, 100);
     } completion:^(BOOL finished) {
         NSLog(@"%@: finished=%d", NSStringFromSelector(_cmd), finished);
+    }];
+}
+
+/** 测试各种动画方法 */
+- (void)executeAnimations {
+//    [self executeKeyframeAnimation];
+//    [self executePerformSystemAnimationOOAC];
+//    [self executePerformWithoutAnimation];
+    [self executeSetAnimationsEnabled];
+}
+
+/** 测试关键帧动画 */
+- (void)executeKeyframeAnimation {
+    UIViewKeyframeAnimationOptions option;
+    option = UIViewKeyframeAnimationOptionCalculationModeDiscrete;
+    option = 0;
+    [UIView animateKeyframesWithDuration:5 delay:0 options:option animations:^{
+        self.testView.alpha = 0.1; // 这个属性变化持续时长5s
+        [UIView addKeyframeWithRelativeStartTime:0 relativeDuration:0.5 animations:^{
+            self.testView.frame = CGRectMake(10, 5, 200, 100); // 这个属性变化持续时长5*0.2=1s
+        }];
+        [UIView addKeyframeWithRelativeStartTime:0.5 relativeDuration:0.2 animations:^{
+            self.testView.bounds = CGRectMake(0, 0, 50, 50);
+        }];
+        [UIView addKeyframeWithRelativeStartTime:0.7 relativeDuration:0.3 animations:^{
+            self.testView.frame = CGRectMake(250, 100, 200, 100);
+        }];
+    } completion:^(BOOL finished) {
+        NSLog(@"%@: finished=%d", NSStringFromSelector(_cmd), finished);
+    }];
+}
+
+/** 测试performSystemAnimation:onViews:options:animations:completion: */
+- (void)executePerformSystemAnimationOOAC {
+    UISystemAnimation systemAnimation = UISystemAnimationDelete;
+    // 这个动画会修改onViews中的视图的transform为[0.25, 0, 0, 0.25, 0, 0]，修改alpha为0，并且从父视图中移除，总体效果是立即放大后缩小且变透明。
+    [UIView performSystemAnimation:systemAnimation onViews:@[self.testOptionView.leftView, self.testOptionView.rightView] options:0 animations:^{
+        // 在这个block中，不能修改onViews中的视图属性，可以修改其他视图属性或者置空
+        self.testView.transform = CGAffineTransformMake(0.25, 0, 0, 0.25, 0, 0);
+    } completion:^(BOOL finished) {
+        NSLog(@"%@: finished=%d, leftView.transform=%@, leftView.alpha=%f, leftView.frame=%@", NSStringFromSelector(_cmd), finished, NSStringFromCGAffineTransform(self.testOptionView.leftView.transform), self.testOptionView.leftView.alpha, NSStringFromCGRect(self.testOptionView.leftView.frame));
+    }];
+}
+
+/** 测试performWithoutAnimation */
+- (void)executePerformWithoutAnimation {
+    [UIView performWithoutAnimation:^{
+//        [self executeAnimationWithUIViewAnimationOptionAllowAnimatedContent]; // performWithoutAnimation无法去掉卷页效果，但可以去掉属性动画
+        [self executePropertyAnimation]; // 外部包含performWithoutAnimation时，属性变化没有动画而是立即生效
+        // 看网上的资料，performWithoutAnimation一般用于UITableView的reloadSections:withRowAnimation:。
+    }];
+}
+
+/** 测试setAnimationsEnabled: */
+- (void)executeSetAnimationsEnabled {
+    [UIView animateWithDuration:1 delay:2 options:0 animations:^{
+        self.testOptionView.alpha = 0.2;
+        NSLog(@"(animation1) areAnimationsEnabled=%d", [UIView areAnimationsEnabled]);
+    } completion:^(BOOL finished) {
+        NSLog(@"%@: (animation1) finished=%d, areAnimationsEnabled=%d", NSStringFromSelector(_cmd), finished, [UIView areAnimationsEnabled]);
+    }];
+    [UIView setAnimationsEnabled:NO]; // 设置之后的animation属性修改立即生效没有动画，只对这句代码之后创建的animation有效，而这句之前创建的动画即使延迟还没有启动，在启动时还是有动画效果的
+    [UIView animateWithDuration:1 delay:0 options:0 animations:^{
+        self.testView.frame = CGRectMake(200, 70, 100, 120);
+        NSLog(@"(animation2) areAnimationsEnabled=%d", [UIView areAnimationsEnabled]);
+    } completion:^(BOOL finished) {
+        NSLog(@"%@: (animation2) finished=%d, areAnimationsEnabled=%d", NSStringFromSelector(_cmd), finished, [UIView areAnimationsEnabled]);
     }];
 }
 
