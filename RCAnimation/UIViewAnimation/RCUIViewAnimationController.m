@@ -274,8 +274,10 @@
 //    [self executeAnimationWithUIViewAnimationOptionLayoutSubviews];
 //    [self executeAnimationWithUIViewAnimationOptionBeginFromCurrentState];
 //    [self executeAnimationWithUIViewAnimationOptionOverrideInheritedDuration];
-    [self executeAnimationWithUIViewAnimationOptionAllowAnimatedContent];
+//    [self executeAnimationWithUIViewAnimationOptionAllowAnimatedContent];
 //    [self executeAnimationWithUIViewAnimationOptionShowHideTransitionViews];
+//    [self executeAnimationWithUIViewAnimationOptionOverrideInheritedOptions];
+    [self executeAnimationWithUIViewAnimationOptionPreferredFramesPerSecond30];
 }
 
 /** 测试UIViewAnimationOptionLayoutSubviews */
@@ -382,6 +384,40 @@
     }];
 }
 
+/** 测试UIViewAnimationOptionOverrideInheritedOptions */
+- (void)executeAnimationWithUIViewAnimationOptionOverrideInheritedOptions {
+    UIViewAnimationOptions option;
+//    option = UIViewAnimationOptionOverrideInheritedOptions; // 嵌套动画的option设置了xxOverrideInheritedOptions，就不会继承外层的弹簧时间曲线，默认是Linear时间曲线
+//    option = 0;
+//    option = UIViewAnimationOptionOverrideInheritedCurve|UIViewAnimationOptionCurveEaseInOut; // 设置不生效，还是继承了外层的弹簧效果
+    option = UIViewAnimationOptionOverrideInheritedCurve|UIViewAnimationOptionCurveEaseInOut|UIViewAnimationOptionOverrideInheritedOptions; // 设置生效，嵌套动画时间曲线不是弹簧曲线而是EaseInOut
+    
+    [UIView animateWithDuration:5 delay:0 usingSpringWithDamping:0.2 initialSpringVelocity:0.5 options:0 animations:^{
+        self.testView.frame = CGRectMake(150, 50, 100, 120);
+        NSLog(@"animation1");
+        [UIView animateWithDuration:1 delay:0 options:option animations:^{ // ①即使不设置UIViewAnimationOptionOverrideInheritedOptions，也不会继承外层的options如UIViewAnimationOptionAutoreverse、UIViewAnimationOptionOverrideInheritedDuration等（不管外层动画是弹簧动画还是transition动画还是普通动画）。②不设置xxOverrideInheritedOptions，会继承外层的弹簧效果。
+            self.testOptionView.frame = CGRectMake(150, 50, 100, 120);
+            NSLog(@"animation2");
+        } completion:^(BOOL finished) {
+            NSLog(@"%@: finished=%d (animation2)", NSStringFromSelector(_cmd), finished);
+        }];
+    } completion:^(BOOL finished) {
+        NSLog(@"%@: finished=%d (animation1)", NSStringFromSelector(_cmd), finished);
+    }];
+}
 
+/** 测试UIViewAnimationOptionPreferredFramesPerSecond30 */
+- (void)executeAnimationWithUIViewAnimationOptionPreferredFramesPerSecond30 {
+    UIViewAnimationOptions option;
+    option = UIViewAnimationOptionPreferredFramesPerSecond30; // 这个动画效果看起来有点卡顿，而xx60和Default相对平滑点，官方文档说明“It's recommended that you use the default value unless you have identified a specific need for an explicit rate.”，除非需要明确的帧率，否则不需要设置这个选项。
+    option = UIViewAnimationOptionPreferredFramesPerSecond60;
+//    option = 0;
+    
+    [UIView animateWithDuration:0.3 delay:0 options:option animations:^{
+        self.testView.frame = CGRectMake(250, 550, 200, 100);
+    } completion:^(BOOL finished) {
+        NSLog(@"%@: finished=%d", NSStringFromSelector(_cmd), finished);
+    }];
+}
 
 @end
