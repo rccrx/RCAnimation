@@ -36,9 +36,10 @@
 //    self.view.backgroundColor = [UIColor colorWithRed:208/255.0 green:255/255.0 blue:216/255.0 alpha:1];
     self.view.backgroundColor = [UIColor whiteColor];
     
-    [self selfViewAddButtonWithOriginY:250 leftOrRight:YES title:@"重置视图" tag:99];
-    [self selfViewAddButtonWithOriginY:250 leftOrRight:NO title:@"CALayer和CAShapeLayer" tag:1];
+    [self selfViewAddButtonWithOriginY:250 leftOrRight:NO title:@"重置视图" tag:99];
+    [self selfViewAddButtonWithOriginY:250 leftOrRight:YES title:@"CALayer和CAShapeLayer" tag:1];
     [self selfViewAddButtonWithOriginY:300 leftOrRight:YES title:@"CATextLayer" tag:2];
+    [self selfViewAddButtonWithOriginY:300 leftOrRight:NO title:@"CAGradientLayer" tag:3];
 }
 
 /** 按钮点击事件 */
@@ -59,6 +60,11 @@
         case 2:
         {
             [self testCATextLayer];
+            break;
+        }
+        case 3:
+        {
+            [self testCAGradientLayer];
             break;
         }
             
@@ -106,7 +112,44 @@
 
 /** 测试CATextLayer */
 - (void)testCATextLayer {
-//    CATextLayer
+    for (int i = 0; i < 3; i++) {
+        CATextLayer *layer = [CATextLayer layer];
+        layer.name = TempLayerName;
+        layer.string = @"CATextLayer";
+        layer.backgroundColor = [UIColor blueColor].CGColor;
+        layer.fontSize = 17;
+        
+        if (i == 0) {
+            layer.frame = CGRectMake(20, 50, 100, 50);
+            layer.allowsFontSubpixelQuantization = NO;
+        } else if (i == 1) {
+            layer.frame = CGRectMake(150, 50, 100, 50);
+            layer.allowsFontSubpixelQuantization = YES;
+        } else {
+            layer.frame = CGRectMake(20, 150, 100, 50);
+//            layer.frame = CGRectMake(150, 300+4.5, 100, 30);
+//            layer.allowsFontSubpixelQuantization = NO;
+//            layer.allowsFontSubpixelQuantization = YES; // 不知道allowsFontSubpixelQuantization有什么作用
+            layer.contentsScale = [UIScreen mainScreen].scale; // 一开始文字比UIButton模糊，修改contentsScale可以让文字和UIButton的文字一样
+            
+        }
+        
+        [self.view.layer addSublayer:layer];
+    }
+}
+
+/** 测试CAGradientLayer */
+- (void)testCAGradientLayer {
+    CAGradientLayer *layer = [CAGradientLayer layer];
+    layer.name = TempLayerName;
+    layer.frame = CGRectMake(20, 50, 320, 50);
+    layer.colors = @[(id)[UIColor redColor].CGColor, (id)[UIColor greenColor].CGColor, (id)[UIColor blueColor].CGColor];
+    layer.locations = @[@0.2, @0.5, @0.6]; // 表示0.2的位置是红色，0.5的位置是绿色，0-0.2之间为红色，0.2-0.5之间从红色过渡到绿色
+    NSLog(@"%@: startPoint=%@", NSStringFromSelector(_cmd), NSStringFromCGPoint(layer.startPoint));
+    layer.startPoint = CGPointMake(1, 1); // 默认是{0.5, 0}，表示上边界中间，是颜色梯度的起始点，也就是红色的位置
+    layer.endPoint = CGPointMake(0.2, 0.3);
+//    layer.type = kCAGradientLayerAxial; // kCAGradientLayerAxial颜色交接处为直线；kCAGradientLayerRadial颜色交接处为弧形
+    [self.view.layer addSublayer:layer];
 }
 
 @end
