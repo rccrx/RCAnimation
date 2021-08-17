@@ -53,7 +53,7 @@
         @{@"UIViewAnimationOptionPreferredFramesPerSecond60":@(UIViewAnimationOptionPreferredFramesPerSecond60)},
         @{@"UIViewAnimationOptionPreferredFramesPerSecond30":@(UIViewAnimationOptionPreferredFramesPerSecond30)}];
     
-    _optionsPickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.frame)-10-80, CGRectGetWidth(self.view.frame), 80)];
+    _optionsPickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.frame)-50-80, CGRectGetWidth(self.view.frame), 80)];
     self.optionsPickerView.layer.borderWidth = 2;
     self.optionsPickerView.dataSource = self;
     self.optionsPickerView.delegate = self;
@@ -448,7 +448,7 @@
     [UIView animateKeyframesWithDuration:5 delay:0 options:option animations:^{
         self.testView.alpha = 0.1; // 这个属性变化持续时长5s
         [UIView addKeyframeWithRelativeStartTime:0 relativeDuration:0.5 animations:^{
-            self.testView.frame = CGRectMake(10, 5, 200, 100); // 这个属性变化持续时长5*0.2=1s
+            self.testView.frame = CGRectMake(10, 5, 200, 100); // 这个属性变化持续时长5*0.5=2.5s
         }];
         [UIView addKeyframeWithRelativeStartTime:0.5 relativeDuration:0.2 animations:^{
             self.testView.bounds = CGRectMake(0, 0, 50, 50);

@@ -13,6 +13,7 @@
 		51CA960C2622FE9C004F183C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51CA960A2622FE9C004F183C /* LaunchScreen.storyboard */; };
 		51CA960F2622FE9C004F183C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 51CA960E2622FE9C004F183C /* main.m */; };
 		51D51E132642889F005EF590 /* RCUIViewAnimationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D51E122642889F005EF590 /* RCUIViewAnimationController.m */; };
+		51D5DC5126CAABB400D6F2E1 /* RCCoreAnimationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51D5DC5026CAABB400D6F2E1 /* RCCoreAnimationController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,8 @@
 		51CA960E2622FE9C004F183C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		51D51E112642889F005EF590 /* RCUIViewAnimationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCUIViewAnimationController.h; sourceTree = "<group>"; };
 		51D51E122642889F005EF590 /* RCUIViewAnimationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCUIViewAnimationController.m; sourceTree = "<group>"; wrapsLines = 1; };
+		51D5DC4F26CAABB400D6F2E1 /* RCCoreAnimationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCCoreAnimationController.h; sourceTree = "<group>"; };
+		51D5DC5026CAABB400D6F2E1 /* RCCoreAnimationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCCoreAnimationController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +62,7 @@
 		51CA95FB2622FE99004F183C /* RCAnimation */ = {
 			isa = PBXGroup;
 			children = (
+				51D1EF3126C6699F002BBD28 /* CoreAnimation */,
 				51CA96162622FEBE004F183C /* UIViewAnimation */,
 				51CA95FC2622FE99004F183C /* AppDelegate.h */,
 				51CA95FD2622FE99004F183C /* AppDelegate.m */,
@@ -79,6 +83,15 @@
 				51C5CE882643C78D00788AD0 /* RCCustomView.m */,
 			);
 			path = UIViewAnimation;
+			sourceTree = "<group>";
+		};
+		51D1EF3126C6699F002BBD28 /* CoreAnimation */ = {
+			isa = PBXGroup;
+			children = (
+				51D5DC4F26CAABB400D6F2E1 /* RCCoreAnimationController.h */,
+				51D5DC5026CAABB400D6F2E1 /* RCCoreAnimationController.m */,
+			);
+			path = CoreAnimation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -154,6 +167,7 @@
 				51D51E132642889F005EF590 /* RCUIViewAnimationController.m in Sources */,
 				51CA95FE2622FE99004F183C /* AppDelegate.m in Sources */,
 				51CA960F2622FE9C004F183C /* main.m in Sources */,
+				51D5DC5126CAABB400D6F2E1 /* RCCoreAnimationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

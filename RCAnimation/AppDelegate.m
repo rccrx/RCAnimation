@@ -7,6 +7,7 @@
 
 #import "AppDelegate.h"
 #import "RCUIViewAnimationController.h"
+#import "RCCoreAnimationController.h"
 
 @interface AppDelegate ()
 
@@ -18,10 +19,18 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    RCUIViewAnimationController *vc = [RCUIViewAnimationController new];
+    UITabBarController *tbController = [[UITabBarController alloc] init];
+    
+    RCCoreAnimationController *caVC = [RCCoreAnimationController new];
+    caVC.tabBarItem.title = @"Core Animation";
+    [tbController addChildViewController:caVC];
+    
+    RCUIViewAnimationController *vaVC = [RCUIViewAnimationController new];
+    vaVC.tabBarItem.title = @"UIView动画";
+    [tbController addChildViewController:vaVC];
     
     _window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.window.rootViewController = vc;
+    self.window.rootViewController = tbController;
     [self.window makeKeyAndVisible];
     
     return YES;
